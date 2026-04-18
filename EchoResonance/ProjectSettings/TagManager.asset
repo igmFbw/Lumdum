@@ -41,3 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BG_2
+    uniqueID: 4010611189
+    locked: 0
+  - name: BG_1
+    uniqueID: 2146546137
+    locked: 0
+  - name: Map
+    uniqueID: 2739223873
+    locked: 0
+  - name: FG_1
+    uniqueID: 41533741
+    locked: 0
+  - name: FG_2
+    uniqueID: 2075583065
+    locked: 0

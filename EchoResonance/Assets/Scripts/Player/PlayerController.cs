@@ -28,16 +28,13 @@ public class PlayerController : MonoBehaviour
     void OnEnable()
     {
         EventHolder.OnAttackStateChange += OnAttackStateChange;
+        EventHolder.OnPlayerSpiked += OnPlayerSpiked;
     }
     void OnDisable()
     {
         EventHolder.OnAttackStateChange -= OnAttackStateChange;
+        EventHolder.OnPlayerSpiked -= OnPlayerSpiked;
     }
-    void OnAttackStateChange(PlayerAttackState state)
-    {
-        playerAttackState = state;
-    }
-
     void Update()
     {
         BoolCheck();
@@ -46,6 +43,19 @@ public class PlayerController : MonoBehaviour
         FlipController();
         AnimSet();
     }
+    
+    #region  EventHolder
+    void OnAttackStateChange(PlayerAttackState state)
+    {
+        playerAttackState = state;
+    }
+    void OnPlayerSpiked()
+    {
+        Die();
+    }
+    #endregion
+
+    #region  Player Action Logic
     void Move()
     {
         rb.velocity = new Vector2(Horizontal * speed, rb.velocity.y);    
@@ -61,7 +71,11 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, fallSpeed);
         }
     }
-    void FlipController()
+    void Die()
+    {
+        Debug.Log("Player Die");
+    }
+       void FlipController()
     {
         if (Horizontal > 0.1f && !isFacingRight)
             Flip();
@@ -73,6 +87,9 @@ public class PlayerController : MonoBehaviour
         isFacingRight = !isFacingRight;
         transform.Rotate(0, 180f, 0);
     }
+    #endregion
+    
+    #region Others
     void AnimSet()
     {
         anim.SetBool("IsMoving", isMove);
@@ -102,6 +119,7 @@ public class PlayerController : MonoBehaviour
     {
         return Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer).collider;
     }
+    #endregion
     void OnDrawGizmos()
     {
         Gizmos.color = groundCheckColor;
