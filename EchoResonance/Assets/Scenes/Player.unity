@@ -1193,7 +1193,7 @@ GameObject:
   - component: {fileID: 2034457863}
   - component: {fileID: 2034457864}
   m_Layer: 5
-  m_Name: AttackSwitch_s
+  m_Name: WaveSwitch_s
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
