@@ -5,6 +5,11 @@ using UnityEngine;
 public class Wave : MonoBehaviour
 {
     public PlayerWaveState waveState;
+    public float LifeTime{get;set;}
+    void OnEnable()
+    {
+        StartCoroutine(LifrTime());
+    }
     void OnTriggerEnter2D(Collider2D collider)
     {
         switch(collider.tag)
@@ -19,6 +24,15 @@ public class Wave : MonoBehaviour
             default:
                 break;
         }
+    }
+    private IEnumerator LifrTime()
+    {
+        while(LifeTime > 0)
+        {
+            LifeTime -= Time.deltaTime;
+            yield return null;
+        }
+        gameObject.SetActive(false);
     }
 
 }

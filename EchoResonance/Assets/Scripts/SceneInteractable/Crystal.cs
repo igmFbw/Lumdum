@@ -18,6 +18,7 @@ public class Crystal : MonoBehaviour
             {
                 case CrystalType.Red:
                     // 触发红色晶石特性
+                    anim.SetBool("Activate", true);
                     break;
                 case CrystalType.Blue:
                     // 触发蓝色晶石特性
@@ -57,8 +58,7 @@ public class Crystal : MonoBehaviour
         return false;
     }
     public void RedCrystalSet()
-    {
+    {        
         gameObject.layer = LayerMask.NameToLayer("Ground");
-        Destroy(GetComponent<Animator>());
     }
 }

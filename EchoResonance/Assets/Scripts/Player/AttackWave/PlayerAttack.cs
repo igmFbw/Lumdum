@@ -5,9 +5,13 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
     public PlayerWaveState playerAttackState;
+    [SerializeField]private Transform attackPosition;
+    [SerializeField]private float waveSpeed=12f;
+    [SerializeField]private float attackFrequency=0.5f;
+    private float attackTime=0;
+    private bool isAttack = false;
     [SerializeField]private float holdtime=0;
     [Range(0,5)][SerializeField]private float holdRangeTime=0.5f;
-    public GameObject wavePrefab;
     void OnEnable()
     {
         EventHolder.OnAttackStateChange += OnAttackStateChange;
@@ -23,37 +27,52 @@ public class PlayerAttack : MonoBehaviour
     void Update()
     {
         if(AttackSwitchUI.Instance.IsShow()){return;}
-
-        if (Input.GetKeyUp(KeyCode.Mouse0))
-        {
-            Debug.Log("Attack");
-            Attack();
-        }else if (Input.GetKey(KeyCode.Mouse0))
-        {
+        
+        if (Input.GetKey(KeyCode.Mouse0))
+        {            
             holdtime+=Time.deltaTime;
             if(holdtime>=holdRangeTime)
             {
                 holdtime = holdRangeTime;
             }
+        }else if (Input.GetKeyUp(KeyCode.Mouse0) && isAttack)
+        {
+            Attack();
         }
+        attackTime+=Time.deltaTime;
+        if(attackTime>=attackFrequency)
+        {
+            attackTime = attackFrequency;
+            isAttack = true;
+        }
+
     }
     void Attack()
     {
-        switch (playerAttackState)
-        {
-            case PlayerWaveState.RedWave:
-                break;
-            case PlayerWaveState.GreenWave:
-                break;
-            case PlayerWaveState.BlueWave:
-                break;
-            case PlayerWaveState.YellowWave:
-                break;
-            case PlayerWaveState.None:
-                break;
-            default:
-                break;
-        }
+        SpawnWave();
+
+        isAttack = false;
+        attackTime = 0;
         holdtime = 0;
     }
+    void SpawnWave()
+    {
+        GameObject wave = WavePool.Instance.GetWave(playerAttackState);
+        if (wave == null) return;
+
+        Wave waveComponent = wave.GetComponent<Wave>();
+        waveComponent.LifeTime = holdtime;
+
+        wave.transform.position = attackPosition.position;
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0;
+        Vector2 dir = (mousePos - attackPosition.position).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        wave.transform.Rotate(0, 0, angle+90f);
+
+        Rigidbody2D rb = wave.GetComponent<Rigidbody2D>();
+        rb.velocity = dir * waveSpeed;
+    }
+
 }
