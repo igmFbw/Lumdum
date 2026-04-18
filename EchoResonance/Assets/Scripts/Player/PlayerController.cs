@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
     }
     void AnimSet()
     {
-        //anim.SetBool("isMove", isMove);
+        anim.SetBool("IsMoving", isMove);
         anim.SetBool("IsFlying", isAir);
     }
     void BoolCheck()
