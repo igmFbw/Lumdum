@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Components")]
     public Rigidbody2D rb;
     public Animator anim;
-    public PlayerAttackState playerAttackState;
+    private bool isDeath = false;
 
     [Header("Player Move")]
     [SerializeField]private float speed = 5f;
@@ -27,12 +27,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]bool isGrounded = false;
     void OnEnable()
     {
-        EventHolder.OnAttackStateChange += OnAttackStateChange;
         EventHolder.OnPlayerSpiked += OnPlayerSpiked;
     }
     void OnDisable()
     {
-        EventHolder.OnAttackStateChange -= OnAttackStateChange;
         EventHolder.OnPlayerSpiked -= OnPlayerSpiked;
     }
     void Update()
@@ -45,10 +43,7 @@ public class PlayerController : MonoBehaviour
     }
     
     #region  EventHolder
-    void OnAttackStateChange(PlayerAttackState state)
-    {
-        playerAttackState = state;
-    }
+    
     void OnPlayerSpiked()
     {
         Die();
@@ -74,8 +69,9 @@ public class PlayerController : MonoBehaviour
     void Die()
     {
         Debug.Log("Player Die");
+        isDeath = true;
     }
-       void FlipController()
+    void FlipController()
     {
         if (Horizontal > 0.1f && !isFacingRight)
             Flip();
@@ -94,6 +90,7 @@ public class PlayerController : MonoBehaviour
     {
         anim.SetBool("IsMoving", isMove);
         anim.SetBool("IsFlying", isAir);
+        anim.SetBool("Death", isDeath);
     }
     void BoolCheck()
     {
@@ -118,6 +115,14 @@ public class PlayerController : MonoBehaviour
     bool CheckGround()
     {
         return Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer).collider;
+    }
+    public void Reset()
+    {
+        // 重置位置
+        Debug.Log("Player Reset");
+        // 重置死亡状态
+        isDeath = false;
+        anim.Play("Player_Idle");
     }
     #endregion
     void OnDrawGizmos()

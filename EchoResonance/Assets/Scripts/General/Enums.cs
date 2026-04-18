@@ -1,11 +1,18 @@
 using System;
 
-public enum PlayerAttackState
+public enum PlayerWaveState
 {
     None,
-    WhiteWave,
     RedWave,
     BlueWave,
-    GreenWave,
     YellowWave,
+    GreenWave,
+}
+public enum CrystalType
+{
+    None,
+    Red,
+    Blue,
+    Yellow,
+    Green,
 }

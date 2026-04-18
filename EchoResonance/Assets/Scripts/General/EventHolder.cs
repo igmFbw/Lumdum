@@ -1,10 +1,12 @@
 using System;
+using UnityEngine;
 public class EventHolder
 {
-    public static event Action<PlayerAttackState> OnAttackStateChange;
+    public static event Action<PlayerWaveState> OnAttackStateChange;
     public static event Action OnPlayerSpiked;
-    public static void CallOnAttackStateChange(PlayerAttackState state)
+    public static void CallOnAttackStateChange(PlayerWaveState state)
     {
+        Console.WriteLine(state);
         OnAttackStateChange?.Invoke(state);
     }
     public static void CallOnPlayerSpiked()
