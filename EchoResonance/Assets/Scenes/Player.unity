@@ -440,10 +440,11 @@ GameObject:
   m_Component:
   - component: {fileID: 717810060}
   - component: {fileID: 717810063}
+  - component: {fileID: 717810066}
   - component: {fileID: 717810062}
   - component: {fileID: 717810061}
-  - component: {fileID: 717810064}
   - component: {fileID: 717810065}
+  - component: {fileID: 717810064}
   m_Layer: 0
   m_Name: Player_s
   m_TagString: Player
@@ -603,9 +604,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 717810062}
+  anim: {fileID: 717810066}
   playerAttackState: 0
   speed: 4
   isMove: 0
+  isFacingRight: 1
   jumpCount: 3
   jumpSpeed: 4
   fallSpeed: -0.7
@@ -616,7 +619,6 @@ MonoBehaviour:
   groundCheckColor: {r: 1, g: 0, b: 0, a: 1}
   groundCheckDistance: 0.6
   isGrounded: 0
-  isFacingRight: 1
 --- !u!114 &717810065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -629,6 +631,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a92af0c5bd98c7f41a8ab8e73a8f0742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &717810066
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 717810059}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 69ed0f88bb9dfff4e99103e1d486ad76, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &880939127
 GameObject:
   m_ObjectHideFlags: 0

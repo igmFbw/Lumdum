@@ -6,11 +6,13 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Player Components")]
     public Rigidbody2D rb;
+    public Animator anim;
     public PlayerAttackState playerAttackState;
 
     [Header("Player Move")]
     [SerializeField]private float speed = 5f;
     [SerializeField]bool isMove = false;
+    [SerializeField]bool isFacingRight = false;
     float Horizontal=>Input.GetAxis("Horizontal");
 
     [Header("Player Jump")]
@@ -23,7 +25,6 @@ public class PlayerController : MonoBehaviour
     public Color groundCheckColor = Color.red;
     public float groundCheckDistance = 0.5f;
     [SerializeField]bool isGrounded = false;
-    [SerializeField]bool isFacingRight = false;
     void OnEnable()
     {
         EventHolder.OnAttackStateChange += OnAttackStateChange;
@@ -43,6 +44,7 @@ public class PlayerController : MonoBehaviour
         Move();
         Jump();
         FlipController();
+        AnimSet();
     }
     void Move()
     {
@@ -69,14 +71,12 @@ public class PlayerController : MonoBehaviour
     public void Flip()
     {
         isFacingRight = !isFacingRight;
-
-        // 方法1：旋转Y轴 180°（推荐，不影响子物体）
         transform.Rotate(0, 180f, 0);
-
-        // 方法2：缩放Scale(-1,1,1)（如果你喜欢用缩放翻转，用这个）
-        // Vector3 scale = transform.localScale;
-        // scale.x *= -1;
-        // transform.localScale = scale;
+    }
+    void AnimSet()
+    {
+        //anim.SetBool("isMove", isMove);
+        anim.SetBool("IsFlying", isAir);
     }
     void BoolCheck()
     {
