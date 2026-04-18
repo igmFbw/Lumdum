@@ -26,7 +26,8 @@ public class PlayerAttack : MonoBehaviour
     }
     void Update()
     {
-        if(AttackSwitchUI.Instance.IsShow()){return;}
+        ChangePlayerAttackState();
+        if (AttackSwitchUI.Instance.IsShow()){return;}
         
         if (Input.GetKey(KeyCode.Mouse0))
         {            
@@ -65,14 +66,23 @@ public class PlayerAttack : MonoBehaviour
 
         wave.transform.position = attackPosition.position;
 
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0;
-        Vector2 dir = (mousePos - attackPosition.position).normalized;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        wave.transform.Rotate(0, 0, angle+90f);
-
+        Vector3 mouseScreenPos = Input.mousePosition;
+        mouseScreenPos.z = -Camera.main.transform.position.z; 
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+        worldPos.z = 0;
+        Vector3 dir = (worldPos - wave.transform.position).normalized;
         Rigidbody2D rb = wave.GetComponent<Rigidbody2D>();
         rb.velocity = dir * waveSpeed;
     }
-
+    void ChangePlayerAttackState()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            playerAttackState = PlayerWaveState.GreenWave;
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            playerAttackState = PlayerWaveState.YellowWave;
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            playerAttackState = PlayerWaveState.BlueWave;
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            playerAttackState = PlayerWaveState.RedWave;
+    }
 }

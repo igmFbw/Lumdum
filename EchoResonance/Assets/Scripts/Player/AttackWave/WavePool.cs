@@ -16,7 +16,7 @@ public class WavePool : Singleton<WavePool>
 
     void Start()
     {
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 3; i++)
         {
             CreateWave(waveRedPrefab, waveRedList);
             CreateWave(waveBluePrefab, waveBlueList);

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Wave : MonoBehaviour
 {
     public PlayerWaveState waveState;
-    public float LifeTime{get;set;}
+    public float LifeTime;
     void OnEnable()
     {
         StartCoroutine(LifrTime());
@@ -27,11 +27,7 @@ public class Wave : MonoBehaviour
     }
     private IEnumerator LifrTime()
     {
-        while(LifeTime > 0)
-        {
-            LifeTime -= Time.deltaTime;
-            yield return null;
-        }
+        yield return new WaitForSeconds(LifeTime);
         gameObject.SetActive(false);
     }
 
