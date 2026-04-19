@@ -72,7 +72,6 @@ public class Crystal : MonoBehaviour
                     // 触发绿色晶石特性
                     anim.SetBool("Activate", true);
                     WaveSuccess.Instance.Play(transform);
-                    isActivated = true;
                     break;
                 default:
                     break;
@@ -113,5 +112,9 @@ public class Crystal : MonoBehaviour
     public void YellowCrystalSet()
     {
         isActivated = true;
+    }
+    public void GreenCrystalSet()
+    {
+        PosManager.Instance.UpdatePos(transform);
     }
 }

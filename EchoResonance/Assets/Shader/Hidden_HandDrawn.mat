@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hidden_Outline
-  m_Shader: {fileID: 4800000, guid: 9faa41f68e2c37b41a9ac0e12facf4b1, type: 3}
+  m_Name: Hidden_HandDrawn
+  m_Shader: {fileID: 4800000, guid: b9b35dd8926a8fd43aeae81f9a678d88, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -27,17 +27,9 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _OutlineDistortTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _OutlineAlpha: 0.25
-    - _OutlineDistortAmount: 0.5
-    - _OutlineDistortTexXSpeed: 5
-    - _OutlineDistortTexYSpeed: 5
-    - _OutlinePixelWidth: -12.5
-    m_Colors:
-    - _OutlineColor: {r: 1, g: 0, b: 0, a: 1}
+    - _HandDrawnAmount: 10
+    - _HandDrawnSpeed: 5
+    m_Colors: []
   m_BuildTextureStacks: []

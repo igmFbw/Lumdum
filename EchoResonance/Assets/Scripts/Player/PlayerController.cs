@@ -9,6 +9,11 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
     private bool isDeath = false;
 
+    [Header("Player Health")]
+    [SerializeField]private int health = 3;
+    [SerializeField]private float invulnerableTime = 1.5f;
+    private float invulnerableTimer = 0;
+
     [Header("Player Move")]
     [SerializeField]private float speed = 5f;
     [SerializeField]bool isMove = false;
@@ -46,13 +51,24 @@ public class PlayerController : MonoBehaviour
         AnimSet();
 
         MoveCancelLink();
+
+        HealthCanvas.Instance.SetCurrentHealth(health); // 设置血量ui
+        // 不可伤害时间
+        invulnerableTimer += Time.deltaTime;
+        if(invulnerableTimer >= invulnerableTime)
+        {
+            invulnerableTimer = invulnerableTime;
+        }
+        // 死亡检测
+        if(health<=0)
+            Die();
     }
     
     #region  EventHolder
     
     void OnPlayerSpiked()
-    {
-        Die();
+    {        
+        DecHealth();
     }
     void OnCrystalYellowValueLink(bool isLink)
     {
@@ -80,6 +96,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Player Die");
         isDeath = true;
+        Destroy(gameObject, 1.5f);
     }
     void FlipController()
     {
@@ -92,6 +109,11 @@ public class PlayerController : MonoBehaviour
     {
         isFacingRight = !isFacingRight;
         transform.Rotate(0, 180f, 0);
+    }
+    public void DecHealth()
+    {
+        health--;
+        PosManager.Instance.ReturnCrystalGreenPos(transform);
     }
     #endregion
     
@@ -134,7 +156,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Player Reset");
         // 重置死亡状态
         isDeath = false;
-        anim.Play("Player_Idle");
+        //anim.Play("Player_Idle");
     }
     void MoveCancelLink()
     {
@@ -146,6 +168,15 @@ public class PlayerController : MonoBehaviour
         }
     }
     #endregion
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy")&&invulnerableTimer >= invulnerableTime)
+        {
+            DecHealth();
+            Debug.Log("玩家被敌人攻击");
+            invulnerableTimer = 0;
+        }
+    }
     void OnDrawGizmos()
     {
         Gizmos.color = groundCheckColor;
