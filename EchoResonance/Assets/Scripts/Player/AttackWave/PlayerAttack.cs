@@ -18,19 +18,29 @@ public class PlayerAttack : MonoBehaviour
     void OnEnable()
     {
         EventHolder.OnAttackStateChange += OnAttackStateChange;
+        EventHolder.OnSliderSwing += OnSliderSwing;
     }
     void OnDisable()
     {
         EventHolder.OnAttackStateChange -= OnAttackStateChange;
+        EventHolder.OnSliderSwing -= OnSliderSwing;
     }
     void OnAttackStateChange(PlayerWaveState state)
     {
         playerAttackState = state;
     }
+    void OnSliderSwing()
+    {
+        // 执行共振
+        Debug.Log("共振共振");
+        EventHolder.CallOnAttackChange(true);
+        AdjustFrequencyUI.Instance.Swing();
+    }
     void Update()
     {
 
         ChangePlayerAttackState();
+
         if (AttackSwitchUI.Instance.IsShow()){return;}
         
         if (Input.GetKey(KeyCode.Mouse0))
@@ -41,7 +51,7 @@ public class PlayerAttack : MonoBehaviour
                 holdtime = holdRangeTime;
             }
 
-            if (!isAdjustFrequency)
+            if (!isAdjustFrequency && (playerAttackState == PlayerWaveState.RedWave || playerAttackState == PlayerWaveState.BlueWave))
             {
                 EventHolder.CallOnAttackChange(true);
                 isAdjustFrequency = true;
@@ -58,6 +68,19 @@ public class PlayerAttack : MonoBehaviour
             isAttack = true;
         }
 
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            if(FrequencyValue>=.4 && FrequencyValue<=5)
+            {
+                EventHolder.CallOnCrystalYellowValueAdd();
+            }
+            else
+            {
+                EventHolder.CallOnCrystalYellowValueReset();
+                AdjustFrequencyUI.Instance.StopSwing();
+            }
+        }
+
     }
     void Attack()
     {        
@@ -66,8 +89,10 @@ public class PlayerAttack : MonoBehaviour
         }else if(FrequencyValue>=0 && FrequencyValue < .2 && playerAttackState==PlayerWaveState.BlueWave)
         {
             SpawnWave(PlayerWaveState.BlueWave);
-        }
-        else
+        }else if (playerAttackState == PlayerWaveState.YellowWave)
+        {
+            SpawnWave(PlayerWaveState.YellowWave);
+        }else
         {
             SpawnWave(PlayerWaveState.None);
         }

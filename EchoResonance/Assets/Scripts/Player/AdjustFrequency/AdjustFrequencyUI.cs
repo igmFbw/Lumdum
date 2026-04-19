@@ -44,5 +44,18 @@ public class AdjustFrequencyUI : Singleton<AdjustFrequencyUI>
     {
         return isShow;
     }
+    public void Swing()
+    {
+        adjustFrequency.StartSwing();        
+    }
+    public void StopSwing()
+    {
+        adjustFrequency.StopSwing();
+        Hide();
+    }
+    public bool IsSwinging()
+    {
+        return adjustFrequency.IsSwinging();
+    }
 
 }

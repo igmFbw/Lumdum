@@ -7,6 +7,35 @@ public class Crystal : MonoBehaviour
     public Animator anim;
     public CrystalType crystalType;
 
+    [SerializeField]private int crystalYellowValue = 0;
+
+    void OnEnable()
+    {
+        EventHolder.OnCrystalYellowValueAdd += OnCrystalYellowValueChange;
+        EventHolder.OnCrystalYellowValueReset += OnCrystalYellowValueReset;
+    }
+    void OnDisable()
+    {
+        EventHolder.OnCrystalYellowValueAdd -= OnCrystalYellowValueChange;
+        EventHolder.OnCrystalYellowValueReset -= OnCrystalYellowValueReset;
+    }
+    void OnCrystalYellowValueChange()
+    {
+        if (crystalType == CrystalType.Yellow)
+        {
+            crystalYellowValue++;
+            anim.SetInteger("Value", crystalYellowValue);
+        }
+    }
+    void OnCrystalYellowValueReset()
+    {
+        if (crystalType == CrystalType.Yellow)
+        {
+            crystalYellowValue = 0;  
+            anim.SetInteger("Value", crystalYellowValue);      
+        }
+    }
+
     public void ActivateSwitch(PlayerWaveState waveState)
     {
         Debug.Log("ActivateSwitch");
@@ -26,6 +55,8 @@ public class Crystal : MonoBehaviour
                     break;
                 case CrystalType.Yellow:
                     // 触发黄色晶石特性
+                    anim.SetInteger("Value", crystalYellowValue);
+                    EventHolder.CallOnSliderSwing();
                     break;
                 case CrystalType.Green:
                     // 触发绿色晶石特性

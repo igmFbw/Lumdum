@@ -5,6 +5,9 @@ public class EventHolder
     public static event Action<PlayerWaveState> OnAttackStateChange;
     public static event Action OnPlayerSpiked;
     public static event Action<bool> OnAttackChange;
+    public static event Action OnSliderSwing;
+    public static event Action OnCrystalYellowValueAdd;
+    public static event Action OnCrystalYellowValueReset;
     public static void CallOnAttackStateChange(PlayerWaveState state)
     {
         Console.WriteLine(state);
@@ -17,5 +20,17 @@ public class EventHolder
     public static void CallOnAttackChange(bool isAttack)
     {
         OnAttackChange?.Invoke(isAttack);
+    }
+    public static void CallOnSliderSwing()
+    {
+        OnSliderSwing?.Invoke();
+    }
+    public static void CallOnCrystalYellowValueAdd()
+    {
+        OnCrystalYellowValueAdd?.Invoke();
+    }
+    public static void CallOnCrystalYellowValueReset()
+    {
+        OnCrystalYellowValueReset?.Invoke();
     }
 }

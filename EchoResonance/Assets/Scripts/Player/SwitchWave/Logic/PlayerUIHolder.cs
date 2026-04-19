@@ -29,21 +29,20 @@ public class PlayerUIHolder : MonoBehaviour
 
     void SetSwitchWaveUI()
     {      
-        if(!AttackSwitchUI.Instance.IsShow())
-            return;  
+        // if(!AttackSwitchUI.Instance.IsShow())
+        //     return;  
         AttackSwitchUI.Instance.SetPosition(transform.position);
     }
     void SetAdjustFrequencyUI()
     {
-        if(!AdjustFrequencyUI.Instance.IsShow())
-            return;        
+        // if(!AdjustFrequencyUI.Instance.IsShow())
+        //     return;        
         AdjustFrequencyUI.Instance.SetPosition(transform.position);
     }
     void AddAdjustFrequencyValue(float value)
     {
         if(!AdjustFrequencyUI.Instance.IsShow())
             return;
-        Debug.Log("SetAdjustFrequencyUIValue");
         AdjustFrequencyUI.Instance.AddSliderValue(value);
     }
     private void SwitchWave()
