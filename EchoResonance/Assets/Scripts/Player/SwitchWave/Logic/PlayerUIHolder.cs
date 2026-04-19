@@ -4,17 +4,27 @@ using UnityEngine;
 
 public class PlayerUIHolder : MonoBehaviour
 {
+    private bool isCrystalYellowValueLink = false;
     void OnEnable()
     {
-        EventHolder.OnAttackChange += OnAttackChange;
+        EventHandler.OnAttackChange += OnAttackChange;
+        EventHandler.OnCrystalYellowValueLink += OnCrystalYellowValueLink;
     }
     void OnDisable()
     {
-        EventHolder.OnAttackChange -= OnAttackChange;
+        EventHandler.OnAttackChange -= OnAttackChange;
+        EventHandler.OnCrystalYellowValueLink -= OnCrystalYellowValueLink;
     }
+
 
     void Update()
     {
+        if (isCrystalYellowValueLink)
+        {
+            SetAdjustFrequencyUI();
+            return;
+        }
+            
         SwitchWave();
         SetSwitchWaveUI();
         SetAdjustFrequencyUI();
@@ -64,5 +74,9 @@ public class PlayerUIHolder : MonoBehaviour
             AdjustFrequencyUI.Instance.Show();
         else
             AdjustFrequencyUI.Instance.Hide();
+    }
+    private void OnCrystalYellowValueLink(bool isLink)
+    {
+        isCrystalYellowValueLink = isLink;
     }
 }

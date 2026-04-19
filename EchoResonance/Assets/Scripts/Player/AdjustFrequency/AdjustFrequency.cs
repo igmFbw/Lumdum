@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class AdjustFrequency : MonoBehaviour
 {
     public Slider frequencySlider;
+    public GameObject judgeObject;
     [SerializeField]private float swingSpeed = 1f;
     private bool isSwinging = false;
 
@@ -40,6 +41,7 @@ public class AdjustFrequency : MonoBehaviour
         if (!isSwinging)
         {
             isSwinging = true;
+            judgeObject.SetActive(true);
             StartCoroutine(SliderSwing());
         }
     }
@@ -47,6 +49,7 @@ public class AdjustFrequency : MonoBehaviour
     public void StopSwing()
     {
         isSwinging = false;
+        judgeObject.SetActive(false);
         StopCoroutine(SliderSwing());
     }
 

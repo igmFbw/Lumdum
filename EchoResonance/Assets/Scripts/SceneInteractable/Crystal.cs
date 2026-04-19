@@ -6,18 +6,19 @@ public class Crystal : MonoBehaviour
 {
     public Animator anim;
     public CrystalType crystalType;
+    bool isActivated = false;
 
     [SerializeField]private int crystalYellowValue = 0;
 
     void OnEnable()
     {
-        EventHolder.OnCrystalYellowValueAdd += OnCrystalYellowValueChange;
-        EventHolder.OnCrystalYellowValueReset += OnCrystalYellowValueReset;
+        EventHandler.OnCrystalYellowValueAdd += OnCrystalYellowValueChange;
+        EventHandler.OnCrystalYellowValueReset += OnCrystalYellowValueReset;
     }
     void OnDisable()
     {
-        EventHolder.OnCrystalYellowValueAdd -= OnCrystalYellowValueChange;
-        EventHolder.OnCrystalYellowValueReset -= OnCrystalYellowValueReset;
+        EventHandler.OnCrystalYellowValueAdd -= OnCrystalYellowValueChange;
+        EventHandler.OnCrystalYellowValueReset -= OnCrystalYellowValueReset;
     }
     void OnCrystalYellowValueChange()
     {
@@ -38,6 +39,10 @@ public class Crystal : MonoBehaviour
 
     public void ActivateSwitch(PlayerWaveState waveState)
     {
+        if(isActivated)
+        {
+            return;
+        }
         Debug.Log("ActivateSwitch");
         if(EqualEnum(waveState, crystalType))
         {
@@ -48,18 +53,26 @@ public class Crystal : MonoBehaviour
                 case CrystalType.Red:
                     // 触发红色晶石特性
                     anim.SetBool("Activate", true);
+                    WaveSuccess.Instance.Play(transform);
+                    isActivated = true;
                     break;
                 case CrystalType.Blue:
                     // 触发蓝色晶石特性
                     anim.SetBool("Activate", true);
+                    WaveSuccess.Instance.Play(transform);
+                    isActivated = true;
                     break;
                 case CrystalType.Yellow:
                     // 触发黄色晶石特性
                     anim.SetInteger("Value", crystalYellowValue);
-                    EventHolder.CallOnSliderSwing();
+                    EventHandler.CallOnSliderSwing();
+                    
                     break;
                 case CrystalType.Green:
                     // 触发绿色晶石特性
+                    anim.SetBool("Activate", true);
+                    WaveSuccess.Instance.Play(transform);
+                    isActivated = true;
                     break;
                 default:
                     break;
@@ -96,5 +109,9 @@ public class Crystal : MonoBehaviour
     public void BlueCrystalSet()
     {
         gameObject.layer = LayerMask.NameToLayer("Ground");
+    }
+    public void YellowCrystalSet()
+    {
+        isActivated = true;
     }
 }

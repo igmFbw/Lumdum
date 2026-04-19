@@ -16,3 +16,10 @@ public enum CrystalType
     Yellow,
     Green,
 }
+public enum JMColor
+{
+    Red,
+    Blue,
+    Yellow,
+    Green,
+}

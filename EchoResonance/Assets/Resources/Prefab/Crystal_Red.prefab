@@ -101,6 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 4180494273906609518}
   crystalType: 1
+  crystalYellowValue: 0
 --- !u!61 &9067958108169941446
 BoxCollider2D:
   m_ObjectHideFlags: 0

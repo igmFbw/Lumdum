@@ -5,12 +5,10 @@ using UnityEngine;
 
 public class WavePool : Singleton<WavePool>
 {
-    public GameObject waveNonePrefab;
     public GameObject waveRedPrefab;
     public GameObject waveBluePrefab;
     public GameObject waveGreenPrefab;
     public GameObject waveYellowPrefab;
-    [SerializeField]private List<GameObject> waveNoneList = new List<GameObject>();
     [SerializeField]private List<GameObject> waveRedList = new List<GameObject>();
     [SerializeField]private List<GameObject> waveBlueList = new List<GameObject>();
     [SerializeField]private List<GameObject> waveGreenList = new List<GameObject>();
@@ -20,7 +18,6 @@ public class WavePool : Singleton<WavePool>
     {
         for(int i = 0; i < 3; i++)
         {
-            CreateWave(waveNonePrefab, waveNoneList);
             CreateWave(waveRedPrefab, waveRedList);
             CreateWave(waveBluePrefab, waveBlueList);
             CreateWave(waveGreenPrefab, waveGreenList);       
@@ -47,8 +44,6 @@ public class WavePool : Singleton<WavePool>
     {
         switch (waveState)
         {
-            case PlayerWaveState.None:
-                return GetWaveNone();
             case PlayerWaveState.RedWave:
                 return GetWaveRed();
             case PlayerWaveState.BlueWave:
@@ -60,18 +55,6 @@ public class WavePool : Singleton<WavePool>
             default:
                 return null;
         }
-    }
-    private GameObject GetWaveNone()
-    {
-        foreach(GameObject wave in waveNoneList)
-        {
-            if(!wave.activeSelf)
-            {
-                wave.SetActive(true);
-                return wave;
-            }
-        }
-        return CreateWaveReturn(waveNonePrefab, waveNoneList);
     }
     private GameObject GetWaveRed()
     {

@@ -14,9 +14,31 @@ public class AttackSwitchUI : Singleton<AttackSwitchUI>
     public float totalAngle = 140;
     public float fadeDuration = 0.7f;
     private bool isShow = false;
-
+    void OnEnable()
+    {
+        EventHandler.OnSelectOption += OnSelectOption;
+    }
+    void OnDisable()
+    {
+        EventHandler.OnSelectOption -= OnSelectOption;
+    }
+    void OnSelectOption(GameObject option)
+    {
+        foreach (var item in optionList)
+        {
+            if(item==option)
+            {
+                item.GetComponent<WaveOption>().image.color = Color.gray;
+            }
+            else
+            {
+                item.GetComponent<WaveOption>().image.color = Color.white;
+            }
+        }
+    }
     void Start()
     {
+        GetComponent<Canvas>().worldCamera = Camera.main;
         Hide();
     }
     void Update()

@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-public class EventHolder
+public class EventHandler
 {
     public static event Action<PlayerWaveState> OnAttackStateChange;
     public static event Action OnPlayerSpiked;
@@ -8,6 +8,9 @@ public class EventHolder
     public static event Action OnSliderSwing;
     public static event Action OnCrystalYellowValueAdd;
     public static event Action OnCrystalYellowValueReset;
+    public static event Action<bool> OnCrystalYellowValueLink;
+    public static event Action<GameObject> OnSelectOption;
+
     public static void CallOnAttackStateChange(PlayerWaveState state)
     {
         Console.WriteLine(state);
@@ -33,4 +36,13 @@ public class EventHolder
     {
         OnCrystalYellowValueReset?.Invoke();
     }
+    public static void CallOnCrystalYellowValueLink(bool isLink)
+    {
+        OnCrystalYellowValueLink?.Invoke(isLink);
+    }
+    public static void CallOnSelectOption(GameObject option)
+    {
+        OnSelectOption?.Invoke(option);
+    }
+
 }

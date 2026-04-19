@@ -9,7 +9,7 @@ public class Spike : MonoBehaviour
         if(collision.CompareTag("Player"))
         {
             Debug.Log("Player Spiked");
-            EventHolder.CallOnPlayerSpiked();
+            EventHandler.CallOnPlayerSpiked();
         }
     }
 }

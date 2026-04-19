@@ -25,13 +25,17 @@ public class PlayerController : MonoBehaviour
     public Color groundCheckColor = Color.red;
     public float groundCheckDistance = 0.5f;
     [SerializeField]bool isGrounded = false;
+
+    private bool isCancelLink = false;
     void OnEnable()
     {
-        EventHolder.OnPlayerSpiked += OnPlayerSpiked;
+        EventHandler.OnPlayerSpiked += OnPlayerSpiked;
+        EventHandler.OnCrystalYellowValueLink += OnCrystalYellowValueLink;
     }
     void OnDisable()
     {
-        EventHolder.OnPlayerSpiked -= OnPlayerSpiked;
+        EventHandler.OnPlayerSpiked -= OnPlayerSpiked;
+        EventHandler.OnCrystalYellowValueLink -= OnCrystalYellowValueLink;
     }
     void Update()
     {
@@ -40,6 +44,8 @@ public class PlayerController : MonoBehaviour
         Jump();
         FlipController();
         AnimSet();
+
+        MoveCancelLink();
     }
     
     #region  EventHolder
@@ -47,6 +53,10 @@ public class PlayerController : MonoBehaviour
     void OnPlayerSpiked()
     {
         Die();
+    }
+    void OnCrystalYellowValueLink(bool isLink)
+    {
+        isCancelLink = isLink;
     }
     #endregion
 
@@ -102,7 +112,9 @@ public class PlayerController : MonoBehaviour
             
         // 移动检测
         if(Mathf.Approximately(Horizontal, 0))
+        {
             isMove = false;
+        }  
         else
             isMove = true;
         // 空中检测
@@ -123,6 +135,15 @@ public class PlayerController : MonoBehaviour
         // 重置死亡状态
         isDeath = false;
         anim.Play("Player_Idle");
+    }
+    void MoveCancelLink()
+    {
+        if ((isMove || isAir) && isCancelLink)
+        {
+            EventHandler.CallOnCrystalYellowValueReset();
+            AdjustFrequencyUI.Instance.StopSwing();
+            EventHandler.CallOnCrystalYellowValueLink(false);
+        }
     }
     #endregion
     void OnDrawGizmos()

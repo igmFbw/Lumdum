@@ -5,10 +5,10 @@ using UnityEngine;
 public class Wave : MonoBehaviour
 {
     public PlayerWaveState waveState;
-    public float LifeTime;
+    public float lifeTime;
     void OnEnable()
     {
-        StartCoroutine(LifrTime());
+        StartCoroutine(LifeTime());
     }
     void OnTriggerEnter2D(Collider2D collider)
     {
@@ -25,9 +25,13 @@ public class Wave : MonoBehaviour
                 break;
         }
     }
-    private IEnumerator LifrTime()
+    private IEnumerator LifeTime()
     {
-        yield return new WaitForSeconds(LifeTime);
+        yield return new WaitForSeconds(lifeTime);
+        Destroy();
+    }
+    public void Destroy()
+    {
         gameObject.SetActive(false);
     }
 
