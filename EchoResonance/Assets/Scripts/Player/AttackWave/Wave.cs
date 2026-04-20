@@ -16,10 +16,15 @@ public class Wave : MonoBehaviour
         {
             case "Ground":
                 // wave 消散
+                PlayerController.Instance.PlayCrystalSound_2();
                 break;
             case "Crystal":
                 Crystal crystal = collider.GetComponent<Crystal>();
                 crystal.ActivateSwitch(waveState);
+                if(crystal.GetComponent<Crystal>().crystalType == CrystalType.Yellow)
+                {
+                    crystal.SetIsLink(true);
+                }
                 break;
             default:
                 break;

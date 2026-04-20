@@ -8,7 +8,7 @@ public class BackgroundFollow : MonoBehaviour
 
     [Header("微动画设置")]
     [Tooltip("移动灵敏度（值越小，跟随越迟钝，建议0.005-0.02）")]
-    [Range(0.001f, 0.05f)]
+    [Range(0.001f, 1f)]
     public float sensitivity = 0.01f;
 
     [Tooltip("X轴移动幅度比例（0.01-0.1之间，越小晃动越轻微）")]

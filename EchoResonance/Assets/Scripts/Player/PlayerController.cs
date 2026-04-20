@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     [Header("Player Components")]
     public Rigidbody2D rb;
@@ -36,9 +36,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip flySound;
     [SerializeField] private AudioClip DieSound;
     [SerializeField] private AudioClip HurtSound;
+    [SerializeField] private AudioClip CrystalSound_1;
+    [SerializeField] private AudioClip CrystalSound_2;
     
     private bool isCancelLink = false;
-    private bool isOverHeight = false;
+    [SerializeField]private bool isOverHeight = false;
     void OnEnable()
     {
         EventHandler.OnPlayerSpiked += OnPlayerSpiked;
@@ -164,6 +166,15 @@ public class PlayerController : MonoBehaviour
    
     bool CheckGround()
     {
+        // 检查是否在蓝色水晶上
+        bool isBlue = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, LayerMask.GetMask("Blue"));
+
+        if (isBlue)
+        {
+            StartCoroutine(ChangeJumpCount());
+            return true;
+        }
+        
         return Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
     }
     public void Reset()
@@ -186,11 +197,22 @@ public class PlayerController : MonoBehaviour
     #endregion
     void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log(other.name);
         if (other.CompareTag("Enemy")&&invulnerableTimer >= invulnerableTime)
         {
             DecHealth();
             Debug.Log("玩家被敌人攻击");
             invulnerableTimer = 0;
+        }
+        if (other.CompareTag("Breakable") && isOverHeight)
+        {
+            Debug.Log("玩家激活可破坏墙");
+            other.GetComponent<BreakableWall>().BreakWall();
+        }
+        if (other.CompareTag("Crystal") && other.GetComponent<Crystal>().crystalType == CrystalType.Red && other.GetComponent<Crystal>().GetIsActivated() == true)
+        {
+            Debug.Log("玩家激活红色水晶");
+            StartCoroutine(ChangeOverHeight());
         }
     }
     void OnDrawGizmos()
@@ -217,5 +239,17 @@ public class PlayerController : MonoBehaviour
     {
         audioPlayer.clip = clip;
         audioPlayer.Play();
+    }
+    public void PlayCrystalSound_1()
+    {
+        PlayeSoundEffect(CrystalSound_1);
+    }
+    public void PlayCrystalSound_2()
+    {
+        PlayeSoundEffect(CrystalSound_2);
+    }
+    public bool GetIsDeath()
+    {
+        return isDeath;
     }
 }

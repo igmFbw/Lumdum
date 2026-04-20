@@ -5,16 +5,13 @@ using UnityEngine;
 public class Crystal : MonoBehaviour
 {
     public Animator anim;
-    public CrystalType crystalType;
-    bool isActivated = false;
-    private PlayerController player;
+    public CrystalType crystalType;    
+    [SerializeField]bool isActivated = false;
     [SerializeField] private int crystalYellowValue = 0;
-
-    [SerializeField] private List<Enemy> crystalGreenEnemyList;
+    private bool isLink = false;
 
     void OnEnable()
     {
-        player = transform.Find("Player").GetComponent<PlayerController>();
         EventHandler.OnCrystalYellowValueAdd += OnCrystalYellowValueChange;
         EventHandler.OnCrystalYellowValueReset += OnCrystalYellowValueReset;
     }
@@ -25,7 +22,7 @@ public class Crystal : MonoBehaviour
     }
     void OnCrystalYellowValueChange()
     {
-        if (crystalType == CrystalType.Yellow)
+        if (crystalType == CrystalType.Yellow && isLink)
         {
             crystalYellowValue++;
             anim.SetInteger("Value", crystalYellowValue);
@@ -33,10 +30,11 @@ public class Crystal : MonoBehaviour
     }
     void OnCrystalYellowValueReset()
     {
-        if (crystalType == CrystalType.Yellow)
+        if (crystalType == CrystalType.Yellow && isLink)
         {
             crystalYellowValue = 0;  
-            anim.SetInteger("Value", crystalYellowValue);      
+            anim.SetInteger("Value", crystalYellowValue);    
+            isLink = false;
         }
     }
 
@@ -55,6 +53,7 @@ public class Crystal : MonoBehaviour
             {
                 case CrystalType.Red:
                     // 触发红色晶石特性
+                    PlayerController.Instance.PlayCrystalSound_1();
                     anim.SetBool("Activate", true);
                     RedCrystalSet();
                     WaveSuccess.Instance.Play(transform);
@@ -62,6 +61,7 @@ public class Crystal : MonoBehaviour
                     break;
                 case CrystalType.Blue:
                     // 触发蓝色晶石特性
+                    PlayerController.Instance.PlayCrystalSound_1();
                     anim.SetBool("Activate", true);
                     BlueCrystalSet();
                     WaveSuccess.Instance.Play(transform);
@@ -69,16 +69,16 @@ public class Crystal : MonoBehaviour
                     break;
                 case CrystalType.Yellow:
                     // 触发黄色晶石特性
-                    YellowCrystalSet();
                     anim.SetInteger("Value", crystalYellowValue);
                     EventHandler.CallOnSliderSwing();
                     
                     break;
                 case CrystalType.Green:
                     // 触发绿色晶石特性
+                    PlayerController.Instance.PlayCrystalSound_1();
                     anim.SetBool("Activate", true);
                     WaveSuccess.Instance.Play(transform);
-                    GreenCrystalSet();
+                    GreenCrystalSet();                    
                     break;
                 default:
                     break;
@@ -106,29 +106,46 @@ public class Crystal : MonoBehaviour
         {
             return true;
         }
+        PlayerController.Instance.PlayCrystalSound_2();
         return false;
     }
     public void RedCrystalSet()
     {        
-        gameObject.layer = LayerMask.NameToLayer("Ground");
-        player.StartCoroutine(player.ChangeOverHeight());
+        //gameObject.layer = LayerMask.NameToLayer("Ground");
+        PlayerController.Instance.StartCoroutine(PlayerController.Instance.ChangeOverHeight());
     }
     public void BlueCrystalSet()
     {
-        player.StartCoroutine(player.ChangeJumpCount());
-        gameObject.layer = LayerMask.NameToLayer("Ground");
+        PlayerController.Instance.StartCoroutine(PlayerController.Instance.ChangeJumpCount());
+        gameObject.layer = LayerMask.NameToLayer("Blue");
     }
     public void YellowCrystalSet()
     {
-        isActivated = true;
-        foreach(var item in crystalGreenEnemyList)
+        if(isActivated)
         {
-            //调用EnemyControl中的销毁
+            return;
         }
+        PlayerController.Instance.PlayCrystalSound_1();
+        AdjustFrequencyUI.Instance.StopSwing();
+        isActivated = true;
+        GetComponent<EnemyControl>().DestroyAllEnemies();
     }
     public void GreenCrystalSet()
     {
-        player.RecoverHealth();
+        if(isActivated)
+        {
+            return;
+        }
+        PlayerController.Instance.RecoverHealth();
         PosManager.Instance.UpdatePos(transform);
+        isActivated = true;
+    }
+    public bool GetIsActivated()
+    {
+        return isActivated;
+    }
+    public void SetIsLink(bool isLink)
+    {
+        this.isLink = isLink;
     }
 }

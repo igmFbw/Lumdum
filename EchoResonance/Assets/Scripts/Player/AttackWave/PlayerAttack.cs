@@ -50,15 +50,17 @@ public class PlayerAttack : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
-                if(FrequencyValue>=.4 && FrequencyValue<=5)
+                if(FrequencyValue>=.5 && FrequencyValue<=.8)
                 {
                     EventHandler.CallOnCrystalYellowValueAdd();
+                    PlayerController.Instance.PlayCrystalSound_1();
                 }
                 else
                 {
                     EventHandler.CallOnCrystalYellowValueReset();
                     AdjustFrequencyUI.Instance.StopSwing();
                     EventHandler.CallOnCrystalYellowValueLink(false);
+                    PlayerController.Instance.PlayCrystalSound_2();
                 }
             }
             return;
@@ -76,7 +78,7 @@ public class PlayerAttack : MonoBehaviour
                 holdtime = holdRangeTime;
             }
 
-            if (!isAdjustFrequency && (playerAttackState == PlayerWaveState.RedWave || playerAttackState == PlayerWaveState.BlueWave) && playerAttackState != PlayerWaveState.None)
+            if (!isAdjustFrequency && playerAttackState != PlayerWaveState.None)
             {
                 EventHandler.CallOnAttackChange(true);
                 isAdjustFrequency = true;
@@ -98,13 +100,13 @@ public class PlayerAttack : MonoBehaviour
     {        
         if(FrequencyValue>=.8 && FrequencyValue<=1 && playerAttackState==PlayerWaveState.RedWave){
             SpawnWave(PlayerWaveState.RedWave,90f,waveSpeed,Vector2.zero);
-        }else if(FrequencyValue>=0 && FrequencyValue < .2 && playerAttackState==PlayerWaveState.BlueWave)
+        }else if(FrequencyValue>=0 && FrequencyValue <= .2 && playerAttackState==PlayerWaveState.BlueWave)
         {
             SpawnWave(PlayerWaveState.BlueWave,90f,waveSpeed,Vector2.zero);
-        }else if (playerAttackState == PlayerWaveState.YellowWave)
+        }else if (FrequencyValue>.5 && FrequencyValue < .8 && playerAttackState == PlayerWaveState.YellowWave)
         {
             SpawnWave(PlayerWaveState.YellowWave,0,waveSpeed/3,Vector2.zero);
-        }else if (playerAttackState == PlayerWaveState.GreenWave)
+        }else if (FrequencyValue>.2 && FrequencyValue < .8 && playerAttackState == PlayerWaveState.GreenWave)
         {
             SpawnWave(PlayerWaveState.GreenWave,-90,waveSpeed/3,Vector2.zero);
         }

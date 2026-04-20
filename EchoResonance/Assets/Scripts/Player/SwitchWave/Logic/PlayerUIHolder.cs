@@ -68,7 +68,7 @@ public class PlayerUIHolder : MonoBehaviour
             AttackSwitchUI.Instance.Hide();
         }
     }
-        private void OnAttackChange(bool isAttack)
+    private void OnAttackChange(bool isAttack)
     {
         if(isAttack)
             AdjustFrequencyUI.Instance.Show();
