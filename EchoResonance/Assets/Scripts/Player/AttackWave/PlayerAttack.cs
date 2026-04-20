@@ -63,9 +63,6 @@ public class PlayerAttack : MonoBehaviour
             }
             return;
         }
-
-        //ChangePlayerAttackState();
-
         if (AttackSwitchUI.Instance.IsShow()){return;}
         
         if (Input.GetKey(KeyCode.Mouse0))
@@ -140,17 +137,6 @@ public class PlayerAttack : MonoBehaviour
         wave.transform.rotation = Quaternion.AngleAxis(angle+ag, Vector3.forward);
         Rigidbody2D rb = wave.GetComponent<Rigidbody2D>();
         rb.velocity = dir * force;
-    }
-    void ChangePlayerAttackState()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            playerAttackState = PlayerWaveState.RedWave;
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            playerAttackState = PlayerWaveState.BlueWave;
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            playerAttackState = PlayerWaveState.YellowWave; 
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            playerAttackState = PlayerWaveState.GreenWave;
     }
     public bool IsAttack()
     {

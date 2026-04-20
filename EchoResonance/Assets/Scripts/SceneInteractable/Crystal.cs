@@ -7,11 +7,14 @@ public class Crystal : MonoBehaviour
     public Animator anim;
     public CrystalType crystalType;
     bool isActivated = false;
+    private PlayerController player;
+    [SerializeField] private int crystalYellowValue = 0;
 
-    [SerializeField]private int crystalYellowValue = 0;
+    [SerializeField] private List<Enemy> crystalGreenEnemyList;
 
     void OnEnable()
     {
+        player = transform.Find("Player").GetComponent<PlayerController>();
         EventHandler.OnCrystalYellowValueAdd += OnCrystalYellowValueChange;
         EventHandler.OnCrystalYellowValueReset += OnCrystalYellowValueReset;
     }
@@ -53,17 +56,20 @@ public class Crystal : MonoBehaviour
                 case CrystalType.Red:
                     // 触发红色晶石特性
                     anim.SetBool("Activate", true);
+                    RedCrystalSet();
                     WaveSuccess.Instance.Play(transform);
                     isActivated = true;
                     break;
                 case CrystalType.Blue:
                     // 触发蓝色晶石特性
                     anim.SetBool("Activate", true);
+                    BlueCrystalSet();
                     WaveSuccess.Instance.Play(transform);
                     isActivated = true;
                     break;
                 case CrystalType.Yellow:
                     // 触发黄色晶石特性
+                    YellowCrystalSet();
                     anim.SetInteger("Value", crystalYellowValue);
                     EventHandler.CallOnSliderSwing();
                     
@@ -72,6 +78,7 @@ public class Crystal : MonoBehaviour
                     // 触发绿色晶石特性
                     anim.SetBool("Activate", true);
                     WaveSuccess.Instance.Play(transform);
+                    GreenCrystalSet();
                     break;
                 default:
                     break;
@@ -104,17 +111,24 @@ public class Crystal : MonoBehaviour
     public void RedCrystalSet()
     {        
         gameObject.layer = LayerMask.NameToLayer("Ground");
+        player.StartCoroutine(player.ChangeOverHeight());
     }
     public void BlueCrystalSet()
     {
+        player.StartCoroutine(player.ChangeJumpCount());
         gameObject.layer = LayerMask.NameToLayer("Ground");
     }
     public void YellowCrystalSet()
     {
         isActivated = true;
+        foreach(var item in crystalGreenEnemyList)
+        {
+            //调用EnemyControl中的销毁
+        }
     }
     public void GreenCrystalSet()
     {
+        player.RecoverHealth();
         PosManager.Instance.UpdatePos(transform);
     }
 }

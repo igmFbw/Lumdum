@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     float Horizontal=>Input.GetAxis("Horizontal");
 
     [Header("Player Jump")]
+    private int maxJumpCount = 3;
     [SerializeField]private int jumpCount = 3;
     [SerializeField]private float jumpSpeed = 5f;
     [SerializeField]private float fallSpeed = 5f;
@@ -30,8 +31,14 @@ public class PlayerController : MonoBehaviour
     public Color groundCheckColor = Color.red;
     public float groundCheckDistance = 0.5f;
     [SerializeField]bool isGrounded = false;
-
+    [Header("Player Sound Effect")]
+    [SerializeField] private AudioSource audioPlayer;
+    [SerializeField] private AudioClip flySound;
+    [SerializeField] private AudioClip DieSound;
+    [SerializeField] private AudioClip HurtSound;
+    
     private bool isCancelLink = false;
+    private bool isOverHeight = false;
     void OnEnable()
     {
         EventHandler.OnPlayerSpiked += OnPlayerSpiked;
@@ -87,7 +94,9 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
             jumpCount--;
-        }else if (Input.GetKey(KeyCode.LeftShift)&&!isGrounded) // 滑翔
+            PlayeSoundEffect(flySound);
+        }
+        else if (Input.GetKey(KeyCode.LeftShift)&&!isGrounded) // 滑翔
         {
             rb.velocity = new Vector2(rb.velocity.x, fallSpeed);
         }
@@ -96,6 +105,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Player Die");
         isDeath = true;
+        PlayeSoundEffect(DieSound);
         Destroy(gameObject, 1.5f);
     }
     void FlipController()
@@ -112,8 +122,15 @@ public class PlayerController : MonoBehaviour
     }
     public void DecHealth()
     {
+        PlayeSoundEffect(HurtSound);
         health--;
         PosManager.Instance.ReturnCrystalGreenPos(transform);
+    }
+    public void RecoverHealth()
+    {
+        if (health == 3)
+            return;
+        health++;
     }
     #endregion
     
@@ -129,26 +146,25 @@ public class PlayerController : MonoBehaviour
         // 地面检测
         isGrounded = CheckGround();
 
-        if(isGrounded)
-            jumpCount = 3;
-            
-        // 移动检测
-        if(Mathf.Approximately(Horizontal, 0))
+        if (isGrounded)
         {
-            isMove = false;
-        }  
-        else
-            isMove = true;
-        // 空中检测
-        if(Mathf.Approximately(rb.velocity.y, 0))
             isAir = false;
+            jumpCount = maxJumpCount;
+        }
         else
             isAir = true;
+        // 移动检测
+        if (Mathf.Approximately(Horizontal, 0))
+        {
+            isMove = false;
+        }
+        else
+            isMove = true;
     }
    
     bool CheckGround()
     {
-        return Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer).collider;
+        return Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
     }
     public void Reset()
     {
@@ -181,5 +197,25 @@ public class PlayerController : MonoBehaviour
     {
         Gizmos.color = groundCheckColor;
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y - groundCheckDistance));
+    }
+    public IEnumerator ChangeJumpCount()
+    {
+        maxJumpCount = 6;
+        jumpCount = jumpCount == 3 ? 6 : jumpCount;
+        yield return new WaitForSeconds(5);
+        maxJumpCount = 3;
+        jumpCount = jumpCount >= 3 ? 3 : jumpCount;
+    }
+    public IEnumerator ChangeOverHeight()
+    {
+        isOverHeight = true;
+        yield return new WaitForSeconds(5);
+        maxJumpCount = 3;
+        isOverHeight = false;
+    }
+    void PlayeSoundEffect(AudioClip clip)
+    {
+        audioPlayer.clip = clip;
+        audioPlayer.Play();
     }
 }
