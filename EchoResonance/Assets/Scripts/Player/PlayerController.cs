@@ -41,6 +41,7 @@ public class PlayerController : Singleton<PlayerController>
     
     private bool isCancelLink = false;
     [SerializeField]private bool isOverHeight = false;
+    [SerializeField]private bool isDashBuff = false;
     void OnEnable()
     {
         EventHandler.OnPlayerSpiked += OnPlayerSpiked;
@@ -71,6 +72,15 @@ public class PlayerController : Singleton<PlayerController>
         // 死亡检测
         if(health<=0)
             Die();
+
+        if(isDashBuff)
+        {
+            DashBuff.Instance.Play(transform);
+        }
+        else
+        {
+            DashBuff.Instance.Stop();
+        }
     }
     
     #region  EventHolder
@@ -170,8 +180,11 @@ public class PlayerController : Singleton<PlayerController>
         bool isBlue = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, LayerMask.GetMask("Blue"));
 
         if (isBlue)
-        {
-            StartCoroutine(ChangeJumpCount());
+        { 
+            if (!isDashBuff)
+            {
+                StartCoroutine(ChangeJumpCount());
+            }
             return true;
         }
         
@@ -198,6 +211,10 @@ public class PlayerController : Singleton<PlayerController>
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log(other.name);
+        if (other.CompareTag("GameWin"))
+        {
+            other.GetComponent<GameWin>().isWin = true;
+        }
         if (other.CompareTag("Enemy")&&invulnerableTimer >= invulnerableTime)
         {
             DecHealth();
@@ -207,7 +224,7 @@ public class PlayerController : Singleton<PlayerController>
         if (other.CompareTag("Breakable") && isOverHeight)
         {
             Debug.Log("玩家激活可破坏墙");
-            other.GetComponent<BreakableWall>().BreakWall();
+            other?.GetComponent<BreakableWall>()?.BreakWall();
         }
         if (other.CompareTag("Crystal") && other.GetComponent<Crystal>().crystalType == CrystalType.Red && other.GetComponent<Crystal>().GetIsActivated() == true)
         {
@@ -222,11 +239,13 @@ public class PlayerController : Singleton<PlayerController>
     }
     public IEnumerator ChangeJumpCount()
     {
+        isDashBuff = true;
         maxJumpCount = 6;
         jumpCount = jumpCount == 3 ? 6 : jumpCount;
         yield return new WaitForSeconds(5);
         maxJumpCount = 3;
         jumpCount = jumpCount >= 3 ? 3 : jumpCount;
+        isDashBuff = false;
     }
     public IEnumerator ChangeOverHeight()
     {

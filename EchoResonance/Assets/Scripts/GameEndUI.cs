@@ -13,11 +13,11 @@ public class GameEndUI : MonoBehaviour
     }
     private void PlayAgain()
     {
-        Debug.Log("重玩");
+        TeleportManager.Instance.ResetScene();
     }
     private void ReturnMenu()
     {
-        Debug.Log("返回主菜单");
+        TeleportManager.Instance.Teleport("GameScene", "MainScene");
     }
     private void OnDisable()
     {

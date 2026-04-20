@@ -36,6 +36,17 @@ public class HealthCanvas : Singleton<HealthCanvas>
             default:
                 break;
         }
+        foreach (var item in healthIcons)
+        {
+            if(item.GetComponent<Image>().sprite == image_1)
+            {
+                item.GetComponent<Image>().color=Color.white;
+            }
+            else
+            {
+                item.GetComponent<Image>().color=Color.gray;
+            }
+        }
     }
     public void SetCurrentHealth(int currentHealth)
     {

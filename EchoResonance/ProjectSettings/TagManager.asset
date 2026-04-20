@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - Enemy
   - Breakable
+  - GameWin
   layers:
   - Default
   - TransparentFX

@@ -107,6 +107,7 @@ public class Crystal : MonoBehaviour
             return true;
         }
         PlayerController.Instance.PlayCrystalSound_2();
+        WaveFail.Instance.Play(transform);
         return false;
     }
     public void RedCrystalSet()

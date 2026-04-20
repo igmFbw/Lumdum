@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,15 +10,34 @@ public class EnemyControl : MonoBehaviour
     public List<Enemy> enemies;
     [Header("渐变消失时间")]
     public float fadeDuration = 1f;
+    bool isDeath = false;
+    void Update()
+    {
+        if (isDeath) return;
+        foreach (var enemy in enemies)
+        {
+            if (enemy.isDeath)
+            {
+                Set();
+            }
+        }
+    }
 
     // 外部调用：销毁所有敌人（渐变透明后销毁）
     public void DestroyAllEnemies()
     {
         if (enemies == null || enemies.Count <= 0) return;
 
-        // 启动协程统一渐变销毁
-        StartCoroutine(DestroyAllEnemiesFade());
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<Animator>().SetBool("Death", true);
+            enemy.chaseSpeed = 0;
+            enemy.patrolSpeed = 0;
+        }
+
     }
+
+    
 
     // 协程：所有敌人图片渐变透明 → 销毁
     private IEnumerator DestroyAllEnemiesFade()
@@ -63,4 +84,9 @@ public class EnemyControl : MonoBehaviour
         color.a = Mathf.Lerp(1f, 0f, t); // 从 1 渐变到 0
         image.color = color;
     }
+    public void Set()
+    {
+        isDeath = true;
+        StartCoroutine(DestroyAllEnemiesFade());
+    } 
 }

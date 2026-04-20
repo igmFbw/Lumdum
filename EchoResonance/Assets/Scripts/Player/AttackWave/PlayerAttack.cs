@@ -85,10 +85,11 @@ public class PlayerAttack : MonoBehaviour
             }
                 
         } 
-        if (Input.GetKeyUp(KeyCode.Mouse0) && isAttack)
+        if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             Attack();
         }
+
         attackTime+=Time.deltaTime;
         if(attackTime>=attackFrequency)
         {

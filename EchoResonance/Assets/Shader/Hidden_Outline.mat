@@ -33,11 +33,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _OutlineAlpha: 0.25
+    - _OutlineAlpha: 0.6
     - _OutlineDistortAmount: 0.5
     - _OutlineDistortTexXSpeed: 5
     - _OutlineDistortTexYSpeed: 5
     - _OutlinePixelWidth: -12.5
     m_Colors:
-    - _OutlineColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    - _OutlineColor: {r: 1, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

@@ -26,6 +26,8 @@ public class Enemy : MonoBehaviour
     private float loseTimer;
     private float attackTimer;
 
+    public bool isDeath = false;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -138,5 +140,9 @@ public class Enemy : MonoBehaviour
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(currentPatrolTarget, 0.2f);
+    }
+    public void SetDeath()
+    {
+        isDeath = true;
     }
 }
