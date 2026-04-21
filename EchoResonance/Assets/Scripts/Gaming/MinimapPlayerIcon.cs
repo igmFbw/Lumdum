@@ -27,6 +27,7 @@ public class MinimapPlayerIcon : MonoBehaviour
     void UpdatePlayerPosOnMinimap()
     {
         // 1. 计算玩家在真实地图里的 0~1 比例
+        if(player==null) return;
         float xPercent = Mathf.InverseLerp(mapMin.position.x, mapMax.position.x, player.position.x);
         float yPercent = Mathf.InverseLerp(mapMin.position.y, mapMax.position.y, player.position.y);
 

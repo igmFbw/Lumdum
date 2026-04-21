@@ -8,6 +8,10 @@ public class GameEndUI : MonoBehaviour
     [SerializeField] private Button BtnReturnMenu;
     private void Awake()
     {
+        
+    }
+    private void OnEnable()
+    {
         BtnReturnMenu.onClick.AddListener(ReturnMenu);
         BtnPlayAgain.onClick.AddListener(PlayAgain);
     }

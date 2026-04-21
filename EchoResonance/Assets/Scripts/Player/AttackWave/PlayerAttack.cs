@@ -85,7 +85,7 @@ public class PlayerAttack : MonoBehaviour
             }
                 
         } 
-        if (Input.GetKeyUp(KeyCode.Mouse0))
+        if (Input.GetKeyUp(KeyCode.Mouse0)&&!isCrystalYellowValueLink)
         {
             Attack();
         }
